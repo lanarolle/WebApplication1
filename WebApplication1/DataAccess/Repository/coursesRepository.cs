@@ -115,9 +115,27 @@ namespace WebApplication1.DataAccess.Repository
             }
         }
 
-        Task<Models.courses> IcoursesRepository.Createcourses(Models.courses request)
+        async Task<Models.courses> IcoursesRepository.Createcourses(Models.courses request)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var newcourses = new courses {
+                    CourseId = request.CourseId,
+                    CourseName = request.CourseName,
+                    CourseDescription = request.CourseDescription,
+                    CourseCredit = request.CourseCredit,
+                
+                
+                };
+                var obj = appDBContext.courses.Add(newcourses);
+                await appDBContext.SaveChangesAsync();
+                return obj.Entity;
+            }
+
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         IEnumerable<Models.courses> IcoursesRepository.GetAllcourses()

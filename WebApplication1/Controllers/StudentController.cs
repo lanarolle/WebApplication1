@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Linq.Expressions;
 using WebApplication1.BusinessLogic.Services;
+using WebApplication1.DataAccess;
 using WebApplication1.DataAccess.Models;
 
 namespace WebApplication1.Controllers
@@ -11,11 +12,13 @@ namespace WebApplication1.Controllers
     public class StudentController : ControllerBase
     {
         private readonly StudentService _studentService;
-        public StudentController(StudentService student)
+        private readonly ApplicationDBContext applicationDBContext;
+
+        public StudentController(StudentService student,ApplicationDBContext applicationDBContext)
         {
 
             _studentService = student;
-
+            this.applicationDBContext = applicationDBContext;
         }
 
         [HttpGet]
@@ -33,8 +36,17 @@ namespace WebApplication1.Controllers
         [HttpPost]
         public async Task<ActionResult<Student>> CreateStudent(Student request)
         {
+            if (applicationDBContext.Students.Where(s => s.StuEmail == request.StuEmail).FirstOrDefault() !=null)
+            {
+                return Ok("AlreadyExist");
+            }
+            request.memberSince = DateTime.Now;
+            await applicationDBContext.Students.AddAsync(request);
+            await applicationDBContext.SaveChangesAsync();
+        
             Console.WriteLine(request);
-            return await _studentService.CreateStudent(request);
+             //await _studentService.CreateStudent(request);
+            return Ok("Sucess");
         }
 
         [HttpGet("{id}")]

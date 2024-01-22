@@ -26,12 +26,13 @@ namespace WebApplication1.DataAccess.Models
 
         [Required]
         public string Password { get; set; }
+        public DateTime memberSince { get; internal set; }
 
 
-       
-       // public int UserId { get; set; }
 
-    
+        // public int UserId { get; set; }
+
+
 
 
     }
