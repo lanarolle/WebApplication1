@@ -56,21 +56,19 @@ namespace WebApplication1.Migrations
                     b.Property<int>("CourseNameCourseId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Day")
+                    b.Property<string>("EndTime")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("EndTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("StartTime")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("StartTime")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("SheduledId");
 
                     b.HasIndex("CourseNameCourseId");
 
-                    b.ToTable("Sheduleds");
+                    b.ToTable("Sheduled");
                 });
 
             modelBuilder.Entity("WebApplication1.DataAccess.Models.Student", b =>

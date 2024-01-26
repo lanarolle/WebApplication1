@@ -28,7 +28,7 @@ namespace WebApplication1.DataAccess.Repository
                     Day = request.Day,
                     
                 };
-                var obj = appDBContext.Sheduleds.Add(newSheduled);
+                var obj = appDBContext.Sheduled.Add(newSheduled);
                 await appDBContext.SaveChangesAsync();
                 return obj.Entity;
             }
@@ -42,10 +42,10 @@ namespace WebApplication1.DataAccess.Repository
         {
             try
             {
-                var obj = await appDBContext.Sheduleds.FirstOrDefaultAsync(e => e.SheduledId == SheduledId);
+                var obj = await appDBContext.Sheduled.FirstOrDefaultAsync(e => e.SheduledId == SheduledId);
                 if (obj != null)
                 {
-                    appDBContext.Sheduleds.Remove(obj);
+                    appDBContext.Sheduled.Remove(obj);
                     await appDBContext.SaveChangesAsync();
                     return obj.SheduledId;
                 }
@@ -64,7 +64,7 @@ namespace WebApplication1.DataAccess.Repository
         {
             try
             {
-                return appDBContext.Sheduleds.ToList();
+                return appDBContext.Sheduled.ToList();
             }
             catch (Exception)
             {
@@ -77,7 +77,7 @@ namespace WebApplication1.DataAccess.Repository
         {
             try
             {
-                var result = await appDBContext.Sheduleds.FirstOrDefaultAsync(e => e.SheduledId == sheduled.SheduledId);
+                var result = await appDBContext.Sheduled.FirstOrDefaultAsync(e => e.SheduledId == sheduled.SheduledId);
 
                 if (result != null)
                 {

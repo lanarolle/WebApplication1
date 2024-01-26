@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -12,20 +11,19 @@ namespace WebApplication1.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Sheduleds",
+                name: "Sheduled",
                 columns: table => new
                 {
                     SheduledId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CourseNameCourseId = table.Column<int>(type: "int", nullable: false),
-                    StartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EndTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Day = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    StartTime = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    EndTime = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Sheduleds", x => x.SheduledId);
+                    table.PrimaryKey("PK_Sheduled", x => x.SheduledId);
                     table.ForeignKey(
-                        name: "FK_Sheduleds_courses_CourseNameCourseId",
+                        name: "FK_Sheduled_courses_CourseNameCourseId",
                         column: x => x.CourseNameCourseId,
                         principalTable: "courses",
                         principalColumn: "CourseId",
@@ -33,8 +31,8 @@ namespace WebApplication1.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Sheduleds_CourseNameCourseId",
-                table: "Sheduleds",
+                name: "IX_Sheduled_CourseNameCourseId",
+                table: "Sheduled",
                 column: "CourseNameCourseId");
         }
 
@@ -42,7 +40,7 @@ namespace WebApplication1.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Sheduleds");
+                name: "Sheduled");
         }
     }
 }
