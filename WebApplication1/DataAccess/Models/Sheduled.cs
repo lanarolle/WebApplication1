@@ -16,13 +16,13 @@ namespace WebApplication1.DataAccess.Models
         public courses CourseName { get; set; }
         
         [Required]
-        public DateTime StartTime { get;  set; }
+        public string StartTime { get;  set; }
         
         [Required]
-        public DateTime EndTime { get;  set;}
+        public string EndTime { get;  set;}
 
         [NotMapped]
-        public DateOnly Day { get; set; }
+        public string Day { get; set; }
 
 
     }
