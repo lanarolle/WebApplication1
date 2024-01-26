@@ -28,11 +28,13 @@ builder.Services.AddScoped<IStudentRepository,StudentRepository>();
 builder.Services.AddScoped<IPeopleRepository, PeopleRepository>();
 builder.Services.AddScoped<IcoursesRepository, coursesRepository>();
 builder.Services.AddScoped<IStudentCoursesRepository, StudentCoursesRepository>();
+builder.Services.AddScoped<ISheduledRepository, SheduledRepository>();
 
 builder.Services.AddScoped<coursesService, coursesService>();
 builder.Services.AddScoped<PeopleService, PeopleService>();
 builder.Services.AddScoped<StudentCoursesService, StudentCoursesService>();
 builder.Services.AddScoped<StudentService, StudentService>();
+builder.Services.AddScoped<SheduledService, SheduledService>();
 
 
 builder.Services.AddCors(options => {

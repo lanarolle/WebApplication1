@@ -19,19 +19,26 @@ namespace WebApplication1.DataAccess
 
         public DbSet<People> People { get; set; }
 
+        public DbSet<Sheduled> Sheduleds { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-           /* modelBuilder.Entity<User>()
-                .HasKey(u => u.UserId);
-            modelBuilder.Entity<Student>()
-                .HasKey(s => s.StuRegId);*/
+            /* modelBuilder.Entity<User>()
+                 .HasKey(u => u.UserId);
+             modelBuilder.Entity<Student>()
+                 .HasKey(s => s.StuRegId);*/
 
 
-           /* modelBuilder.Entity<Student>()
-                .HasOne(s => s.UserUser)
-                .WithOne(u => u.Student)
-                .HasForeignKey<Student>(s => s.UserId);*/
-
+            /* modelBuilder.Entity<Student>()
+                 .HasOne(s => s.UserUser)
+                 .WithOne(u => u.Student)
+                 .HasForeignKey<Student>(s => s.UserId);*/
+            modelBuilder.Entity<Sheduled>()
+          .Property(e => e.Day)
+          .HasConversion(
+              v => v.ToString("yyyy-MM-dd"), // Convert DateOnly to string when saving to the database
+              v => DateOnly.Parse(v)          // Convert string to DateOnly when reading from the database
+          );
 
         }
 
