@@ -10,7 +10,7 @@ namespace WebApplication1.DataAccess.Models
     public class Sheduled
     {
         [Key]
-        public string SheduledId { get; set; }
+        public int SheduledId { get; set; }
 
         [Required]
         public courses CourseName { get; set; }
@@ -21,7 +21,7 @@ namespace WebApplication1.DataAccess.Models
         [Required]
         public string EndTime { get;  set;}
 
-        [NotMapped]
+        [Required]
         public string Day { get; set; }
 
 

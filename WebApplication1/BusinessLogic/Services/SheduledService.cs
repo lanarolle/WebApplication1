@@ -39,7 +39,7 @@ namespace WebApplication1.BusinessLogic.Services
             }
         }
 
-        public async Task<string> DeleteSheduled(String SheduledId)
+        public async Task<int> DeleteSheduled(int SheduledId)
         {
             try
             {
