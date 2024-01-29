@@ -42,13 +42,13 @@ namespace WebApplication1.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<string>> DeleteSheduled(string id)
+        public async Task<ActionResult<int>> DeleteSheduled(int id)
         {
             try
             {
                 var result = await _SheduledService.DeleteSheduled(id);
 
-                if (result == "")
+                if (result == 0)
                 {
                     return NotFound();
                 }

@@ -38,7 +38,7 @@ namespace WebApplication1.DataAccess.Repository
             }
         }
 
-        public async Task<string> DeleteSheduled(string SheduledId)
+        public async Task<int> DeleteSheduled(int SheduledId)
         {
             try
             {
@@ -49,7 +49,7 @@ namespace WebApplication1.DataAccess.Repository
                     await appDBContext.SaveChangesAsync();
                     return obj.SheduledId;
                 }
-                return "";
+                return 0;
             }
             catch (Exception)
             {
@@ -60,6 +60,12 @@ namespace WebApplication1.DataAccess.Repository
             
 
         }
+
+        public Task<string> DeleteSheduled(string SheduledId)
+        {
+            throw new NotImplementedException();
+        }
+
         public IEnumerable<Sheduled> GetAllSheduled()
         {
             try

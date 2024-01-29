@@ -16,5 +16,6 @@ namespace WebApplication1.DataAccess.Interfaces
 
 
         public Task<string> DeleteSheduled(string SheduledId);
+        Task<int> DeleteSheduled(int sheduledId);
     }
 }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApplication1.DataAccess;
 
@@ -11,9 +12,11 @@ using WebApplication1.DataAccess;
 namespace WebApplication1.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240126082549_sheduled2")]
+    partial class sheduled2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,11 +53,8 @@ namespace WebApplication1.Migrations
 
             modelBuilder.Entity("WebApplication1.DataAccess.Models.Sheduled", b =>
                 {
-                    b.Property<int>("SheduledId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SheduledId"));
+                    b.Property<string>("SheduledId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("CourseNameCourseId")
                         .HasColumnType("int");
