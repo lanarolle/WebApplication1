@@ -28,6 +28,8 @@ namespace WebApplication1.DataAccess.Models
         public string Password { get; set; }
         public DateTime memberSince { get; internal set; }
 
+        public bool userRole{ get; set; }
+
 
 
         // public int UserId { get; set; }

@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Linq.Expressions;
 using WebApplication1.BusinessLogic.Services;
+using WebApplication1.DataAccess;
 using WebApplication1.DataAccess.Models;
 using WebApplication1.DataAccess.Repository;
 
@@ -13,14 +15,18 @@ namespace WebApplication1.Controllers
         public class CoursesController : ControllerBase
         {
             private readonly coursesService _coursesService;
-            public CoursesController(coursesService courses)
+            private readonly ApplicationDBContext applicationDBContext;
+        private readonly coursesRepository coursesRepository;
+
+        public CoursesController(coursesService courses,ApplicationDBContext applicationDBContext)
             {
 
                 _coursesService = courses;
+             this.applicationDBContext = applicationDBContext;
+          //  this.coursesRepository = coursesRepository;
+        }
 
-            }
-
-            /*[HttpGet]
+            [HttpGet]
             public ActionResult<IEnumerable<courses>> GetAllcourses()
             {
                 var coursesList = _coursesService.GetAllcourses();
@@ -30,22 +36,28 @@ namespace WebApplication1.Controllers
                     return NotFound();
                 }
                 return Ok(coursesList);
-            }*/
-
-            [HttpGet]
-            [Route("courses")]
-            
-            public List<courses> GetAllcourses()
-            {
-                List<courses> courses = coursesRepository.GetCourses();
-                return courses;
             }
+
+            //[HttpGet]
+            //[Route("courses")]
+            
+            //public List<courses> GetAllcourses()
+            //{
+            //    List<courses> courses = coursesRepository.GetCourses();
+            //    return courses;
+            //}
 
             [HttpPost]
             public async Task<ActionResult<courses>> Createcourses(courses request)
             {
-                return await _coursesService.Createcourses(request);
+            if (applicationDBContext.courses.Where(s => s.CourseName == request.CourseName).FirstOrDefault() != null)
+            {
+                return Ok("exists");
             }
+            return await _coursesService.Createcourses(request);
+
+            
+        }
 
             [HttpGet("{id}")]
             public async Task<ActionResult<courses>> GetcoursesById(int id)
@@ -60,6 +72,15 @@ namespace WebApplication1.Controllers
                 return courses;
 
             }
+
+            [HttpDelete("{courseName}")]
+            public async Task<string> Deletecourses(string courseName)
+            {
+            string courses = await _coursesService.Deletecourses(courseName);
+            return courses;
+            }
+
+        
 
         }
     

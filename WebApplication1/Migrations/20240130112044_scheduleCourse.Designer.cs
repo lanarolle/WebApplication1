@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApplication1.DataAccess;
 
@@ -11,9 +12,11 @@ using WebApplication1.DataAccess;
 namespace WebApplication1.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240130112044_scheduleCourse")]
+    partial class scheduleCourse
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,16 +27,13 @@ namespace WebApplication1.Migrations
 
             modelBuilder.Entity("WebApplication1.DataAccess.Models.CourseSchedules", b =>
                 {
-                    b.Property<string>("CourseName")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("CourseId")
+                        .HasColumnType("int");
 
                     b.Property<int>("SheduledId")
                         .HasColumnType("int");
 
-                    b.Property<int>("CourseSchedulesID")
-                        .HasColumnType("int");
-
-                    b.HasKey("CourseName", "SheduledId");
+                    b.HasKey("CourseId", "SheduledId");
 
                     b.HasIndex("SheduledId");
 
@@ -74,13 +74,8 @@ namespace WebApplication1.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SheduledId"));
 
-                    b.Property<string>("CourseName1")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Coursecode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("CourseNameCourseId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Day")
                         .IsRequired()
@@ -96,7 +91,7 @@ namespace WebApplication1.Migrations
 
                     b.HasKey("SheduledId");
 
-                    b.HasIndex("CourseName1");
+                    b.HasIndex("CourseNameCourseId");
 
                     b.ToTable("Sheduled");
                 });
@@ -136,9 +131,6 @@ namespace WebApplication1.Migrations
                     b.Property<DateTime>("memberSince")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("userRole")
-                        .HasColumnType("bit");
-
                     b.HasKey("StuRegId");
 
                     b.ToTable("Students");
@@ -165,8 +157,11 @@ namespace WebApplication1.Migrations
 
             modelBuilder.Entity("WebApplication1.DataAccess.Models.courses", b =>
                 {
-                    b.Property<string>("CourseName")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("CourseId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CourseId"));
 
                     b.Property<string>("CourseCredit")
                         .IsRequired()
@@ -176,7 +171,11 @@ namespace WebApplication1.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("CourseName");
+                    b.Property<string>("CourseName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("CourseId");
 
                     b.ToTable("courses");
                 });
@@ -185,7 +184,7 @@ namespace WebApplication1.Migrations
                 {
                     b.HasOne("WebApplication1.DataAccess.Models.courses", "Course")
                         .WithMany("CourseSchedules")
-                        .HasForeignKey("CourseName")
+                        .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -215,7 +214,7 @@ namespace WebApplication1.Migrations
                 {
                     b.HasOne("WebApplication1.DataAccess.Models.courses", "CourseName")
                         .WithMany()
-                        .HasForeignKey("CourseName1")
+                        .HasForeignKey("CourseNameCourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

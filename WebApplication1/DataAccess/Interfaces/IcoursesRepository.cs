@@ -13,5 +13,7 @@ namespace WebApplication1.DataAccess.Interfaces
 
         public Task<courses> Updatecourses(courses courses);
 
+        public Task<string> Deletecourses(string CourseName);
+
     }
 }

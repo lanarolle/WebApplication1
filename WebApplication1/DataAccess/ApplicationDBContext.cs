@@ -17,23 +17,49 @@ namespace WebApplication1.DataAccess
 
         public DbSet<StudentCourses> StudentCourses { get;set; }
 
+
+        public DbSet<CourseSchedules> CourseSchedules { get; set; }
+
+
+
         public DbSet<People> People { get; set; }
+
+        //public DbSet<CourseSchedules> CourseSchedules { get; set; }
 
         public DbSet<Sheduled> Sheduled { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            /* modelBuilder.Entity<User>()
-                 .HasKey(u => u.UserId);
-             modelBuilder.Entity<Student>()
-                 .HasKey(s => s.StuRegId);*/
+            modelBuilder.Entity<Student>()
+                .HasKey(u => u.StuRegId);
+            modelBuilder.Entity<courses>()
+                .HasKey(s => s.CourseName);
+            modelBuilder.Entity<People>()
+                .HasKey(u => u.UserId);
+            modelBuilder.Entity<Sheduled>()
+                .HasKey(s => s.SheduledId);
+            modelBuilder.Entity<StudentCourses>()
+                .HasKey(s => s.StudentCoursesId);
 
-
-            /* modelBuilder.Entity<Student>()
-                 .HasOne(s => s.UserUser)
-                 .WithOne(u => u.Student)
+            /*modelBuilder.Entity<Sheduled>()
+                 .HasOne(s => s.SheduledId)
+                 .WithMany(u => u.)
                  .HasForeignKey<Student>(s => s.UserId);*/
-            
+
+            modelBuilder.Entity<CourseSchedules>()
+                .HasKey(cs => new { cs.CourseName, cs.SheduledId });
+
+            modelBuilder.Entity<CourseSchedules>()
+                .HasOne(cs => cs.Course)
+                .WithMany(s => s.CourseSchedules)
+                .HasForeignKey(cs => cs.CourseName);
+
+            modelBuilder.Entity<CourseSchedules>()
+               .HasOne(cs => cs.Sheduled)
+               .WithMany(s => s.CourseSchedules)
+               .HasForeignKey(cs => cs.SheduledId);
+
+            base.OnModelCreating(modelBuilder);
 
         }
 

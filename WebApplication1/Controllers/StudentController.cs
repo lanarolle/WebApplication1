@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq.Expressions;
 using WebApplication1.BusinessLogic.Services;
 using WebApplication1.DataAccess;
 using WebApplication1.DataAccess.Models;
+using WebApplication1.DTO;
 
 namespace WebApplication1.Controllers
 {
@@ -19,6 +22,22 @@ namespace WebApplication1.Controllers
 
             _studentService = student;
             this.applicationDBContext = applicationDBContext;
+        }
+
+        [AllowAnonymous]
+        [HttpPost("loginUser")]
+        public IActionResult Login(LoginDto Student)
+        {
+            Student studentAvailable = applicationDBContext.Students.Where(u => u.StuEmail == Student.email).FirstOrDefault();
+            {
+                if (studentAvailable != null)
+                {
+                    return Ok(studentAvailable);
+                }
+
+            }
+
+            return Ok("falire");
         }
 
         [HttpGet]

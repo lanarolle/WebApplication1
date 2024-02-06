@@ -51,6 +51,18 @@ namespace WebApplication1.BusinessLogic.Services
             }
         }
 
+        public async Task<string?> Deletecourses(string CourseName)
+        {
+            try
+            {
+                return await _courses.Deletecourses(CourseName);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         // get courses
 
         public async Task<courses?> GetcoursesById(int id)

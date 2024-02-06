@@ -8,7 +8,7 @@ namespace WebApplication1.DataAccess.Interfaces
         public Task<Sheduled> CreateSheduled(Sheduled request);
 
 
-        public IEnumerable<Sheduled> GetAllSheduled();
+        public Task<List<Sheduled>> GetAllSheduled();
 
        
 
