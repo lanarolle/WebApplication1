@@ -91,7 +91,7 @@ namespace WebApplication1.DataAccess.Repository
             }
         }
 
-        public async Task<courses> Updatecourses(courses courses)
+        /*public async Task<courses> Updatecourses(courses courses)
         {
             try
             {
@@ -107,7 +107,7 @@ namespace WebApplication1.DataAccess.Repository
 
 
                   
-                    result.CourseName = courses.CourseName;
+                   /* result.CourseName = courses.CourseName;
                     result.CourseDescription = courses.CourseDescription;   
                     result.CourseCredit = courses.CourseCredit;
                     
@@ -123,7 +123,7 @@ namespace WebApplication1.DataAccess.Repository
             {
                 throw;
             }
-        }
+        }*/
 
         async Task<Models.courses> IcoursesRepository.Createcourses(Models.courses request)
         {
@@ -177,9 +177,32 @@ namespace WebApplication1.DataAccess.Repository
             }
         }
 
-        Task<Models.courses> IcoursesRepository.Updatecourses(Models.courses courses)
+       /* Task<Models.courses> IcoursesRepository.Updatecourses(Models.courses courses)
         {
             throw new NotImplementedException();
+        }*/
+
+        public async Task<courses> UpdateCourses(courses courses)
+        {
+            string courseName = courses.CourseName;
+            var courseFromDatabase = await appDBContext.courses.FirstOrDefaultAsync(u => u.CourseName == courseName);
+            if (courseFromDatabase != null)
+            {
+                courses Courses = new courses
+                {
+                    CourseName = courses.CourseName,
+                    CourseDescription= courses.CourseDescription,
+                    CourseCredit= courses.CourseCredit,
+                };
+
+                appDBContext.Entry(courseFromDatabase).CurrentValues.SetValues(courses);
+
+                await appDBContext.SaveChangesAsync();
+
+                return courseFromDatabase;
+            }
+
+            return null;
         }
     }
 }

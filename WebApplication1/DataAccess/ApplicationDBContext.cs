@@ -47,17 +47,19 @@ namespace WebApplication1.DataAccess
                  .HasForeignKey<Student>(s => s.UserId);*/
 
             modelBuilder.Entity<CourseSchedules>()
-                .HasKey(cs => new { cs.CourseName, cs.SheduledId });
+                .HasKey(cs => cs.CourseSchedulesID);
 
             modelBuilder.Entity<CourseSchedules>()
                 .HasOne(cs => cs.Course)
                 .WithMany(s => s.CourseSchedules)
-                .HasForeignKey(cs => cs.CourseName);
+                .HasForeignKey(cs => cs.CourseName)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<CourseSchedules>()
                .HasOne(cs => cs.Sheduled)
                .WithMany(s => s.CourseSchedules)
-               .HasForeignKey(cs => cs.SheduledId);
+               .HasForeignKey(cs => cs.SheduledId)
+               .OnDelete(DeleteBehavior.Cascade);
 
             base.OnModelCreating(modelBuilder);
 

@@ -12,8 +12,8 @@ using WebApplication1.DataAccess;
 namespace WebApplication1.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20240201052433_dropcolm")]
-    partial class dropcolm
+    [Migration("20240209093202_ondeleteCascade")]
+    partial class ondeleteCascade
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -77,9 +77,9 @@ namespace WebApplication1.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SheduledId"));
 
-                    b.Property<string>("CourseName1")
+                    b.Property<string>("CourseName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Day")
                         .IsRequired()
@@ -94,8 +94,6 @@ namespace WebApplication1.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("SheduledId");
-
-                    b.HasIndex("CourseName1");
 
                     b.ToTable("Sheduled");
                 });
@@ -185,7 +183,7 @@ namespace WebApplication1.Migrations
                     b.HasOne("WebApplication1.DataAccess.Models.courses", "Course")
                         .WithMany("CourseSchedules")
                         .HasForeignKey("CourseName")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("WebApplication1.DataAccess.Models.Sheduled", "Sheduled")
@@ -208,17 +206,6 @@ namespace WebApplication1.Migrations
                         .IsRequired();
 
                     b.Navigation("Student");
-                });
-
-            modelBuilder.Entity("WebApplication1.DataAccess.Models.Sheduled", b =>
-                {
-                    b.HasOne("WebApplication1.DataAccess.Models.courses", "CourseName")
-                        .WithMany()
-                        .HasForeignKey("CourseName1")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CourseName");
                 });
 
             modelBuilder.Entity("WebApplication1.DataAccess.Models.Sheduled", b =>

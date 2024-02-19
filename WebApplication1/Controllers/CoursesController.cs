@@ -80,6 +80,14 @@ namespace WebApplication1.Controllers
             return courses;
             }
 
+
+
+        [HttpPut]
+        public async Task<courses>  UpdateCourses([FromBody] courses courses)
+        {
+            courses updatedCourses =await _coursesService.Updatecourses(courses);
+            return updatedCourses;
+        }
         
 
         }

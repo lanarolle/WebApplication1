@@ -96,7 +96,7 @@ namespace WebApplication1.BusinessLogic.Services
         {
             try
             {
-                return await _courses.Updatecourses(courses);
+                return await _courses.UpdateCourses(courses);
             }
             catch (Exception)
             {

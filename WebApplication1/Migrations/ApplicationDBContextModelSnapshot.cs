@@ -74,11 +74,7 @@ namespace WebApplication1.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SheduledId"));
 
-                    b.Property<string>("CourseName1")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Coursecode")
+                    b.Property<string>("CourseName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -95,8 +91,6 @@ namespace WebApplication1.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("SheduledId");
-
-                    b.HasIndex("CourseName1");
 
                     b.ToTable("Sheduled");
                 });
@@ -209,17 +203,6 @@ namespace WebApplication1.Migrations
                         .IsRequired();
 
                     b.Navigation("Student");
-                });
-
-            modelBuilder.Entity("WebApplication1.DataAccess.Models.Sheduled", b =>
-                {
-                    b.HasOne("WebApplication1.DataAccess.Models.courses", "CourseName")
-                        .WithMany()
-                        .HasForeignKey("CourseName1")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CourseName");
                 });
 
             modelBuilder.Entity("WebApplication1.DataAccess.Models.Sheduled", b =>
