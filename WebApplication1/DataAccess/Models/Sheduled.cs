@@ -2,7 +2,8 @@
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
-
+using System.Text.Json.Serialization;
+using Microsoft.EntityFrameworkCore;
 
 namespace WebApplication1.DataAccess.Models
 {
@@ -12,8 +13,8 @@ namespace WebApplication1.DataAccess.Models
         [Key]
         public int SheduledId { get; set; }
 
-        [Required]
-        public courses CourseName { get; set; }
+        [ForeignKey("CourseName")]
+        public string CourseName { get; set; }
         
         [Required]
         public string StartTime { get;  set; }
@@ -23,7 +24,10 @@ namespace WebApplication1.DataAccess.Models
 
         [Required]
         public string Day { get; set; }
-
-
+ 
+        [JsonIgnore]
+        public ICollection<CourseSchedules>? CourseSchedules { get; set;}
+        
     }
 }
+ 

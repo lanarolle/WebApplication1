@@ -1,4 +1,5 @@
 ﻿using Azure.Core;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.DataAccess.Interfaces;
 using WebApplication1.DataAccess.Models;
@@ -23,31 +24,35 @@ namespace WebApplication1.DataAccess.Repository
 
         public async Task<courses> Createcourses(courses request)
         {
+            
             try
             {
-                var newcourses = new courses { CourseId = request.CourseId, CourseName = request.CourseName, CourseDescription = request.CourseDescription, CourseCredit = request.CourseCredit, };
+                var newcourses = new courses { CourseName = request.CourseName, CourseDescription = request.CourseDescription, CourseCredit = request.CourseCredit, };
                 var obj = appDBContext.courses.Add(newcourses);
                 await appDBContext.SaveChangesAsync();
                 return obj.Entity;
             }
             catch (Exception)
             {
+                //throw;
+
+                
                 throw;
             }
         }
 
-        public async Task<int> Deletecourses(int courseId)
+        public async Task<string> Deletecourses(string courseName)
         {
             try
             {
-                var obj = await appDBContext.courses.FirstOrDefaultAsync(e => e.CourseId ==   courseId  );
+                var obj = await appDBContext.courses.FindAsync(courseName);
                 if (obj != null)
                 {
                     appDBContext.courses.Remove(obj);
                     await appDBContext.SaveChangesAsync();
-                    return obj.CourseId;
+                    return obj.CourseName;
                 }
-                return 0;
+                return null;
             }
             catch (Exception)
             {
@@ -55,6 +60,11 @@ namespace WebApplication1.DataAccess.Repository
             }
 
         }
+
+        //public async Task(courses) Deletecourses(string CourseName)
+        //{
+
+        //}
 
         public IEnumerable<courses> GetAllcourses()
         {
@@ -81,11 +91,11 @@ namespace WebApplication1.DataAccess.Repository
             }
         }
 
-        public async Task<courses> Updatecourses(courses courses)
+        /*public async Task<courses> Updatecourses(courses courses)
         {
             try
             {
-                var result = await appDBContext.courses.FirstOrDefaultAsync(e => e.CourseId == courses.CourseId);
+                var result = await appDBContext.courses.FirstOrDefaultAsync(e => e.CourseName == courses.CourseName);
                 if (result != null)
                 {
 
@@ -96,8 +106,8 @@ namespace WebApplication1.DataAccess.Repository
                     
 
 
-                    result.CourseId = courses.CourseId;
-                    result.CourseName = courses.CourseName;
+                  
+                   /* result.CourseName = courses.CourseName;
                     result.CourseDescription = courses.CourseDescription;   
                     result.CourseCredit = courses.CourseCredit;
                     
@@ -113,14 +123,14 @@ namespace WebApplication1.DataAccess.Repository
             {
                 throw;
             }
-        }
+        }*/
 
         async Task<Models.courses> IcoursesRepository.Createcourses(Models.courses request)
         {
             try
             {
                 var newcourses = new courses {
-                    CourseId = request.CourseId,
+                    
                     CourseName = request.CourseName,
                     CourseDescription = request.CourseDescription,
                     CourseCredit = request.CourseCredit,
@@ -138,9 +148,21 @@ namespace WebApplication1.DataAccess.Repository
             }
         }
 
+        //Task<courses> IcoursesRepository.Deletecourses(string CourseName)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
         IEnumerable<Models.courses> IcoursesRepository.GetAllcourses()
         {
-            throw new NotImplementedException();
+            try
+            {
+                return appDBContext.courses.ToList();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         async Task<Models.courses> IcoursesRepository.GetcoursesById(int id)
@@ -155,9 +177,32 @@ namespace WebApplication1.DataAccess.Repository
             }
         }
 
-        Task<Models.courses> IcoursesRepository.Updatecourses(Models.courses courses)
+       /* Task<Models.courses> IcoursesRepository.Updatecourses(Models.courses courses)
         {
             throw new NotImplementedException();
+        }*/
+
+        public async Task<courses> UpdateCourses(courses courses)
+        {
+            string courseName = courses.CourseName;
+            var courseFromDatabase = await appDBContext.courses.FirstOrDefaultAsync(u => u.CourseName == courseName);
+            if (courseFromDatabase != null)
+            {
+                courses Courses = new courses
+                {
+                    CourseName = courses.CourseName,
+                    CourseDescription= courses.CourseDescription,
+                    CourseCredit= courses.CourseCredit,
+                };
+
+                appDBContext.Entry(courseFromDatabase).CurrentValues.SetValues(courses);
+
+                await appDBContext.SaveChangesAsync();
+
+                return courseFromDatabase;
+            }
+
+            return null;
         }
     }
 }

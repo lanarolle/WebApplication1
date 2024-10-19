@@ -1,7 +1,10 @@
-﻿using Azure.Core;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using System.Net.Http.Headers;
+using System.Text.Json;
+using System.Text;
 using WebApplication1.DataAccess.Interfaces;
 using WebApplication1.DataAccess.Models;
+using System.Text.Json.Serialization;
 
 namespace WebApplication1.DataAccess.Repository
 {
@@ -11,14 +14,14 @@ namespace WebApplication1.DataAccess.Repository
 
         public StudentRepository(ApplicationDBContext context)
         {
-            appDBContext= context;
+            appDBContext = context;
         }
 
         public async Task<Student> CreateStudent(Student request)
         {
             try
             {
-                var newStudent =new Student
+                var newStudent = new Student
                 {
 
                     StuRegId = request.StuRegId,
@@ -33,7 +36,7 @@ namespace WebApplication1.DataAccess.Repository
                 await appDBContext.SaveChangesAsync();
                 return obj.Entity;
             }
-            catch (Exception )
+            catch (Exception)
             {
                 throw;
             }
@@ -44,7 +47,7 @@ namespace WebApplication1.DataAccess.Repository
             try
             {
                 var obj = await appDBContext.Students.FirstOrDefaultAsync(e => e.StuRegId == StudentId);
-                if(obj != null)
+                if (obj != null)
                 {
                     appDBContext.Students.Remove(obj);
                     await appDBContext.SaveChangesAsync();
@@ -52,24 +55,25 @@ namespace WebApplication1.DataAccess.Repository
                 }
                 return 0;
             }
-            catch(Exception )
+            catch (Exception)
             {
                 throw;
             }
-           
+
         }
 
         public IEnumerable<Student> GetAllStudents()
         {
             try
             {
-                return appDBContext.Students.ToList();
+                return appDBContext.Students.Where(student => !student.userRole).ToList();
+
             }
             catch (Exception)
             {
                 throw;
             }
-           
+
         }
 
         public async Task<Student> GetStudentById(int id)
@@ -78,25 +82,57 @@ namespace WebApplication1.DataAccess.Repository
             {
                 return await appDBContext.Students.FindAsync(id);
             }
-            catch(Exception)
+            catch (Exception)
             {
                 throw;
             }
         }
+        public static async Task GenerateAccessToken()
+        {
+            string tokenEndpoint = "https://identity.nexar.com/connect/token";
+            string clientId = "YOUR_CLIENT_ID";
+            string clientSecret = "YOUR_CLIENT_SECRET";
 
+            var httpClient = new HttpClient();
+
+            var request = new HttpRequestMessage(HttpMethod.Post, tokenEndpoint);
+            request.Headers.Authorization = CreateBasicAuthenticationHeader(clientId, clientSecret);
+            request.Content = new FormUrlEncodedContent(
+                new Dictionary<string, string>
+                {
+                    { "grant_type", "client_credentials" },
+                    { "scope", "supply.domain" }
+                });
+
+            var response = await httpClient.SendAsync(request);
+            response.EnsureSuccessStatusCode();
+
+            string content = await response.Content.ReadAsStringAsync();
+            var respObj = JsonSerializer.Deserialize<TokenResponse>(content);
+            string accessToken = respObj.AccessToken;
+
+            Console.WriteLine($"Access token: {accessToken}");
+        }
+
+        private static AuthenticationHeaderValue CreateBasicAuthenticationHeader(string clientId, string clientSecret)
+        {
+            string creds = $"{clientId}:{clientSecret}";
+            string encodedCreds = Convert.ToBase64String(Encoding.UTF8.GetBytes(creds));
+            return new AuthenticationHeaderValue("Basic", encodedCreds);
+        }
         public async Task<Student> UpdateStudent(Student student)
         {
-           try
+            try
             {
-                var result = await appDBContext.Students.FirstOrDefaultAsync(e =>e.StuRegId == student.StuRegId);
+                var result = await appDBContext.Students.FirstOrDefaultAsync(e => e.StuRegId == student.StuRegId);
 
-                if(result != null)
+                if (result != null)
                 {
 
                     //result.Name = student.StuRegId;
                     //result.Address = student.Address;
-                   // result.Email = student.Email;
-                   // result.Mobile = student.Mobile;
+                    //result.Email = student.Email;
+                    //result.Mobile = student.Mobile;
                     //result.Password = student.Password;
 
 
@@ -115,10 +151,22 @@ namespace WebApplication1.DataAccess.Repository
                 }
                 return null;
             }
-            catch(Exception)
+            catch (Exception)
             {
                 throw;
             }
         }
+    }
+
+    internal class TokenResponse
+    {
+        [JsonPropertyName("access_token")]
+        public string AccessToken { get; set; }
+
+        [JsonPropertyName("expires_in")]
+        public int ExpiresIn { get; set; }
+
+        [JsonPropertyName("scope")]
+        public string Scope { get; set; }
     }
 }

@@ -11,7 +11,11 @@ namespace WebApplication1.DataAccess.Interfaces
 
         public Task<courses> GetcoursesById(int id);
 
-        public Task<courses> Updatecourses(courses courses);
+       // public Task<courses> Updatecourses(courses courses);
+
+        public Task<string> Deletecourses(string CourseName);
+
+        public Task<courses> UpdateCourses(courses courses);
 
     }
 }

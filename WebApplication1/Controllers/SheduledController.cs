@@ -32,7 +32,7 @@ namespace WebApplication1.Controllers
             {
                 return NotFound();
             }
-            return Ok(sheduledList);
+            return Ok(sheduledList.Result);
         }
 
         [HttpPost]

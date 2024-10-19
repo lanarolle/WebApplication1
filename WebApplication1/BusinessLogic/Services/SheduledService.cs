@@ -27,11 +27,11 @@ namespace WebApplication1.BusinessLogic.Services
             }
         }
 
-        public IEnumerable<Sheduled> GetAllSheduled()
+        public Task<List<Sheduled>> GetAllSheduled()
         {
             try
             {
-                return _sheduled.GetAllSheduled().ToList();
+                return _sheduled.GetAllSheduled();
             }
             catch (Exception)
             {

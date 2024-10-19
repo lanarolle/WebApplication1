@@ -22,6 +22,24 @@ namespace WebApplication1.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("WebApplication1.DataAccess.Models.CourseSchedules", b =>
+                {
+                    b.Property<string>("CourseName")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("SheduledId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CourseSchedulesID")
+                        .HasColumnType("int");
+
+                    b.HasKey("CourseName", "SheduledId");
+
+                    b.HasIndex("SheduledId");
+
+                    b.ToTable("CourseSchedules");
+                });
+
             modelBuilder.Entity("WebApplication1.DataAccess.Models.People", b =>
                 {
                     b.Property<int>("UserId")
@@ -56,8 +74,9 @@ namespace WebApplication1.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SheduledId"));
 
-                    b.Property<int>("CourseNameCourseId")
-                        .HasColumnType("int");
+                    b.Property<string>("CourseName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Day")
                         .IsRequired()
@@ -72,8 +91,6 @@ namespace WebApplication1.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("SheduledId");
-
-                    b.HasIndex("CourseNameCourseId");
 
                     b.ToTable("Sheduled");
                 });
@@ -113,6 +130,9 @@ namespace WebApplication1.Migrations
                     b.Property<DateTime>("memberSince")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("userRole")
+                        .HasColumnType("bit");
+
                     b.HasKey("StuRegId");
 
                     b.ToTable("Students");
@@ -139,11 +159,8 @@ namespace WebApplication1.Migrations
 
             modelBuilder.Entity("WebApplication1.DataAccess.Models.courses", b =>
                 {
-                    b.Property<int>("CourseId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CourseId"));
+                    b.Property<string>("CourseName")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CourseCredit")
                         .IsRequired()
@@ -153,13 +170,28 @@ namespace WebApplication1.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("CourseName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("CourseId");
+                    b.HasKey("CourseName");
 
                     b.ToTable("courses");
+                });
+
+            modelBuilder.Entity("WebApplication1.DataAccess.Models.CourseSchedules", b =>
+                {
+                    b.HasOne("WebApplication1.DataAccess.Models.courses", "Course")
+                        .WithMany("CourseSchedules")
+                        .HasForeignKey("CourseName")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WebApplication1.DataAccess.Models.Sheduled", "Sheduled")
+                        .WithMany("CourseSchedules")
+                        .HasForeignKey("SheduledId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+
+                    b.Navigation("Sheduled");
                 });
 
             modelBuilder.Entity("WebApplication1.DataAccess.Models.People", b =>
@@ -175,13 +207,12 @@ namespace WebApplication1.Migrations
 
             modelBuilder.Entity("WebApplication1.DataAccess.Models.Sheduled", b =>
                 {
-                    b.HasOne("WebApplication1.DataAccess.Models.courses", "CourseName")
-                        .WithMany()
-                        .HasForeignKey("CourseNameCourseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("CourseSchedules");
+                });
 
-                    b.Navigation("CourseName");
+            modelBuilder.Entity("WebApplication1.DataAccess.Models.courses", b =>
+                {
+                    b.Navigation("CourseSchedules");
                 });
 #pragma warning restore 612, 618
         }

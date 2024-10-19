@@ -16,23 +16,40 @@ namespace WebApplication1.DataAccess.Repository
 
         public async Task<Sheduled> CreateSheduled(Sheduled request)
         {
+            var existingCourse = appDBContext.courses.FirstOrDefault( c => c.CourseName == request.CourseName);
             try
             {
                 var newSheduled = new Sheduled
                 {
-
-                    SheduledId = request.SheduledId,
-                    CourseName = request.CourseName,
+                    
+                   SheduledId = request.SheduledId,
+                   CourseName = request.CourseName,
                     StartTime = request.StartTime,
                     EndTime = request.EndTime,
                     Day = request.Day,
+                   // CourseSchedules= new List<CourseSchedules>(),
+                  //  Coursecode=request.Coursecode,
                     
                 };
-                var obj = appDBContext.Sheduled.Add(newSheduled);
+
+            
+
+
+               // var obj = appDBContext.Sheduled.Add(newSheduled);
+                await appDBContext.Sheduled.AddAsync(newSheduled);
                 await appDBContext.SaveChangesAsync();
-                return obj.Entity;
+
+                CourseSchedules courseSchedules = new CourseSchedules
+                {
+                    SheduledId = newSheduled.SheduledId,
+                    CourseName = request.CourseName,
+                };
+                appDBContext.CourseSchedules.Add(courseSchedules);
+      
+                await appDBContext.SaveChangesAsync();
+                return newSheduled;// obj.Entity;
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 throw;
             }
@@ -66,11 +83,13 @@ namespace WebApplication1.DataAccess.Repository
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Sheduled> GetAllSheduled()
+        public async Task<List<Sheduled>> GetAllSheduled()
         {
             try
             {
-                return appDBContext.Sheduled.ToList();
+                // return appDBContext.Sheduled.ToList();
+                return await appDBContext.Sheduled.ToListAsync();
+                
             }
             catch (Exception)
             {
@@ -96,11 +115,11 @@ namespace WebApplication1.DataAccess.Repository
 
 
                     result.SheduledId = sheduled.SheduledId;
-                    result.CourseName = sheduled.CourseName;
+                    //result.course = sheduled.course;
                     result.StartTime = sheduled.StartTime;
                     result.EndTime = sheduled.EndTime;
                     result.Day = sheduled.Day;
-                   
+                    result.CourseName = sheduled.CourseName;
 
 
                     await appDBContext.SaveChangesAsync();
