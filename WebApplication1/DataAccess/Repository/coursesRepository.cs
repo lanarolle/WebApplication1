@@ -45,7 +45,7 @@ namespace WebApplication1.DataAccess.Repository
         {
             try
             {
-                var obj = await appDBContext.courses.FirstOrDefaultAsync(e => e.CourseName ==   courseName  );
+                var obj = await appDBContext.courses.FindAsync(courseName);
                 if (obj != null)
                 {
                     appDBContext.courses.Remove(obj);

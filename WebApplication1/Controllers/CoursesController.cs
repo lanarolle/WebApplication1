@@ -81,7 +81,7 @@ namespace WebApplication1.Controllers
             }
 
 
-
+        
         [HttpPut]
         public async Task<courses>  UpdateCourses([FromBody] courses courses)
         {
@@ -90,7 +90,5 @@ namespace WebApplication1.Controllers
         }
         
 
-        }
-    
-    
+        }    
 }
